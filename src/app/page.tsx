@@ -1,7 +1,5 @@
 import {Box, Button, Typography} from '@mui/material'
 
-export const metadata = {title: '有效流'}
-
 export default function Home() {
   return (
     <Box my={12} textAlign="center">

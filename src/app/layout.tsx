@@ -3,8 +3,9 @@
 import {EndContext, StartContext} from '@/Wrapper'
 import {AppBar, Box, createTheme, CssBaseline, Tab, Tabs, ThemeProvider, Toolbar, useMediaQuery} from '@mui/material'
 import {ReactNode, useEffect, useMemo, useState} from 'react'
-import {metadata} from './page'
 import tabs from './tabs'
+
+const site = '有效流'
 
 export default function Layout({children}: {
   children?: ReactNode
@@ -20,6 +21,9 @@ export default function Layout({children}: {
   const [end, setEnd] = useState<ReactNode>()
   return (
     <html lang="zh-CN">
+      <head>
+        <title>{site}</title>
+      </head>
       <body>
         <ThemeProvider theme={theme}>
           <CssBaseline/>
@@ -32,7 +36,7 @@ export default function Layout({children}: {
                 variant="scrollable"
                 scrollButtons="auto"
               >
-                <Tab component="a" href="/" label={metadata.title} sx={{fontSize: '1.125rem'}}/>
+                <Tab component="a" href="/" label={site} sx={{fontSize: '1.125rem'}}/>
                 {Object.entries(tabs).map(([key, name]) => <Tab key={key} value={key} component="a" href={`/${key}`} label={name}/>)}
               </Tabs>
               {end}
