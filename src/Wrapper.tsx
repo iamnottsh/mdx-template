@@ -1,11 +1,17 @@
 'use client'
 
 import {NavigatorContext} from '@/Navigator'
-import {Box, Container, Divider, List, ListItemButton, ListItemText, Toolbar} from '@mui/material'
+import TocIcon from '@mui/icons-material/Toc';
+import useOpen from '@/useOpen'
+import MenuIcon from '@mui/icons-material/Menu'
+import {Box, Container, Divider, Drawer, IconButton, List, ListItemButton, ListItemText, Toolbar, useMediaQuery, useTheme} from '@mui/material'
 import BananaSlug from 'github-slugger'
 import {join} from 'path'
-import {ReactNode, useEffect, useRef, useState} from 'react'
+import {createContext, Dispatch, ReactNode, useContext, useEffect, useRef, useState} from 'react'
 import {useLocation} from 'react-use'
+
+export const StartContext = createContext<Dispatch<ReactNode> | null>(null)
+export const EndContext = createContext<Dispatch<ReactNode> | null>(null)
 
 const navWidth = 280
 const footerWidth = 240
@@ -27,6 +33,50 @@ export default function Wrapper({children}: {
     }))
   }, [])
   const {hash} = useLocation()
+  const nav =
+    <List>
+      <ListItemButton component="a" href=".">
+        <ListItemText primary="↑" primaryTypographyProps={{noWrap: true}}/>
+      </ListItemButton>
+      <Divider/>
+      {value && Object.entries(value).map(([key, name]) =>
+        <ListItemButton key={key} component="a" href={join(location.pathname, key)}>
+          <ListItemText primary={name} primaryTypographyProps={{noWrap: true}}/>
+        </ListItemButton>)}
+    </List>
+  const [openNav, showNav, hideNav] = useOpen()
+  const setStart = useContext(StartContext)
+  useEffect(() => {
+    if (!setStart) return
+    setStart(
+      <Box display={{xs: 'block', xl: 'none'}}>
+        <IconButton edge="start" size="large" onClick={showNav}>
+          <MenuIcon/>
+        </IconButton>
+      </Box>,
+    )
+    return () => setStart(undefined)
+  }, [setStart, showNav])
+  const footer =
+    <List>
+      {toc?.map(([title, id, level]) =>
+        <ListItemButton key={id} component="a" href={`#${id}`} selected={`#${encodeURIComponent(id)}` === hash}>
+          <ListItemText primary={title} primaryTypographyProps={{noWrap: true}} sx={{pl: (level - 1) << 1}}/>
+        </ListItemButton>)}
+    </List>
+  const [openFooter, showFooter, hideFooter] = useOpen()
+  const setEnd = useContext(EndContext)
+  useEffect(() => {
+    if (!setEnd) return
+    setEnd(
+      <Box display={{xs: 'block', md: 'none'}}>
+        <IconButton edge="end" size="large" onClick={showFooter}>
+          <TocIcon/>
+        </IconButton>
+      </Box>,
+    )
+    return () => setEnd(undefined)
+  }, [setEnd, showFooter])
   return (
     <Box
       position="absolute"
@@ -43,17 +93,14 @@ export default function Wrapper({children}: {
         width={{xs: 0, xl: navWidth}}
       >
         <Toolbar/>
-        <List>
-          <ListItemButton component="a" href=".">
-            <ListItemText primary="↑" primaryTypographyProps={{noWrap: true}}/>
-          </ListItemButton>
-          <Divider/>
-          {value && Object.entries(value).map(([key, name]) =>
-            <ListItemButton key={key} component="a" href={join(location.pathname, key)}>
-              <ListItemText primary={name} primaryTypographyProps={{noWrap: true}}/>
-            </ListItemButton>)}
-        </List>
+        {nav}
       </Box>
+      <Drawer
+        open={useMediaQuery(useTheme().breakpoints.down('xl')) && openNav}
+        onClose={hideNav}
+      >
+        {nav}
+      </Drawer>
       <Container component="main" maxWidth="md" ref={ref}>
         <NavigatorContext.Provider value={setValue}>{children}</NavigatorContext.Provider>
       </Container>
@@ -67,13 +114,15 @@ export default function Wrapper({children}: {
         width={{xs: 0, md: footerWidth}}
       >
         <Toolbar/>
-        <List>
-          {toc?.map(([title, id, level]) =>
-            <ListItemButton key={id} component="a" href={`#${id}`} selected={`#${encodeURIComponent(id)}` === hash}>
-              <ListItemText primary={title} primaryTypographyProps={{noWrap: true}} sx={{pl: (level - 1) << 1}}/>
-            </ListItemButton>)}
-        </List>
+        {footer}
       </Box>
+      <Drawer
+        anchor="right"
+        open={useMediaQuery(useTheme().breakpoints.down('md')) && openFooter}
+        onClose={hideFooter}
+      >
+        {footer}
+      </Drawer>
     </Box>
   )
 }

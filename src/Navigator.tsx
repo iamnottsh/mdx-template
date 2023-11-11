@@ -1,8 +1,8 @@
 'use client'
 
-import {createContext, useContext, useEffect} from 'react'
+import {createContext, Dispatch, useContext, useEffect} from 'react'
 
-export const NavigatorContext = createContext<((value: Record<string, string> | undefined) => void) | null>(null)
+export const NavigatorContext = createContext<Dispatch<Record<string, string> | undefined> | null>(null)
 
 export default function Navigator({children}: {
   children: Record<string, string>
