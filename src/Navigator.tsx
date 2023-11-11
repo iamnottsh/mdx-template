@@ -9,10 +9,9 @@ export default function Navigator({children}: {
 }) {
   const context = useContext(NavigatorContext)
   useEffect(() => {
-    if (context) {
-      context(children)
-      return () => context(undefined)
-    }
+    if (!context) return
+    context(children)
+    return () => context(undefined)
   }, [context, children])
   return null
 }
