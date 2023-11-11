@@ -49,7 +49,7 @@ export default function Wrapper({children}: {
   useEffect(() => {
     if (!setStart) return
     setStart(
-      <Box display={{xs: 'block', xl: 'none'}}>
+      <Box display={{xs: 'block', xl: 'none'}} displayPrint="none">
         <IconButton edge="start" size="large" onClick={showNav}>
           <MenuIcon/>
         </IconButton>
@@ -69,7 +69,7 @@ export default function Wrapper({children}: {
   useEffect(() => {
     if (!setEnd) return
     setEnd(
-      <Box display={{xs: 'block', md: 'none'}}>
+      <Box display={{xs: 'block', md: 'none'}} displayPrint="none">
         <IconButton edge="end" size="large" onClick={showFooter}>
           <TocIcon/>
         </IconButton>
@@ -98,6 +98,7 @@ export default function Wrapper({children}: {
       <Drawer
         open={useMediaQuery(useTheme().breakpoints.down('xl')) && openNav}
         onClose={hideNav}
+        PaperProps={{sx: {displayPrint: 'none'}}}
       >
         {nav}
       </Drawer>
@@ -120,6 +121,7 @@ export default function Wrapper({children}: {
         anchor="right"
         open={useMediaQuery(useTheme().breakpoints.down('md')) && openFooter}
         onClose={hideFooter}
+        PaperProps={{sx: {displayPrint: 'none'}}}
       >
         {footer}
       </Drawer>
