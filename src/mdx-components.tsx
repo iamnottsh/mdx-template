@@ -11,12 +11,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       children?: ReactNode
     }) => {
       const body = <Box className="markdown-body" p={2}>{children}</Box>
-      return (
-        <>
-          <Box display="none" displayPrint="block">{body}</Box>
-          <Box display="block" displayPrint="none"><Wrapper>{body}</Wrapper></Box>
-        </>
-      )
+      return <><Box display="none" displayPrint="block">{body}</Box><Box displayPrint="none"><Wrapper>{body}</Wrapper></Box></>
     },
   }
 }
