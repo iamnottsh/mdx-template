@@ -1,6 +1,10 @@
 'use client'
 
 import {EndContext, StartContext} from '@/Wrapper'
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 import {AppBar, Box, createTheme, CssBaseline, Tab, Tabs, ThemeProvider, Toolbar, useMediaQuery} from '@mui/material'
 import {ReactNode, useEffect, useMemo, useState} from 'react'
 import tabs from './tabs'
