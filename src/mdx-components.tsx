@@ -10,7 +10,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     wrapper: ({children}: {
       children?: ReactNode
     }) => {
-      const body = <div className="markdown-body">{children}</div>
+      const body = <Box className="markdown-body" p={2}>{children}</Box>
       return (
         <>
           <Box display="none" displayPrint="block">{body}</Box>
