@@ -7,7 +7,9 @@ import {ReactNode} from 'react'
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-    wrapper: ({children}: {children?: ReactNode}) => {
+    wrapper: ({children}: {
+      children?: ReactNode
+    }) => {
       const body = <div className="markdown-body">{children}</div>
       return (
         <>
